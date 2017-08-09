@@ -1,110 +1,73 @@
 <?php
-  session_start(); 
-  require "../crud2/database.php";
-  
-  if(!empty($_POST))
-  {
-    //keep track of validation errors
-    $nameError = null;
-    $passwordError = null;
-    
-    //keep track of post values
-    $username = $_POST['username'];
-    $password = $_POST['password'];
-    
-    //input validation for both username and password
-    $inputValid = true;
-    
-    if(empty($username))
+session_start();
+//connect to database
+//$db=mysqli_connect("localhost","root","","authentication");
+require "database.php";
+$db = Database::connectMysqli();
+if(isset($_POST['login_btn']))
+{
+    $username=mysqli_real_escape_string($db,$_POST['username']);
+    $password=mysqli_real_escape_string($db,$_POST['password']);
+//	$username=$_POST['username'];
+ //   $password=$_POST['password'];
+
+    $password=md5($password); //Remember we hashed password before storing last time
+    $sql="SELECT * FROM users WHERE username='$username' AND password='$password'";
+    $result=mysqli_query($db,$sql);
+    if(mysqli_num_rows($result)==1)
     {
-      $nameError = "Please enter a username.";
-      $inputValid = false;
+        $_SESSION['message']="You are now Loggged In";
+        $_SESSION['username']=$username;
+        header("location:home.php");
     }
-    
-    if(empty($password))
-    {
-      $passwordError = "Please enter a password.";
-      $inputValid = false;
+   else
+   {
+                $_SESSION['message']="Username and Password combiation incorrect";
     }
-    
-    //password-username validation
-    if($inputValid)
-    {
-      $pdo = Database::connect();
-      $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-      $sql = "SELECT * FROM customers WHERE name = ? LIMIT 1";
-      $q = $pdo->prepare($SQL);
-      $q->execute(array($username));
-      $results = $q->fetch(PDO::FETCH_ASSOC);
-      
-      if($results['password']==$password)
-      {
-        $_SESSION['username'] = $username;
-        $_SESSION['cust_id'] = $results['id'];
-        Database::disconnect();
-        header("Location: index.php");
-      }
-      
-      else
-      {
-        $passwordError = "The password you entered is not valid. Please try again.";
-        Database::disconnect();
-      }
-      
-    }
-  }
+}
 ?>
-
 <!DOCTYPE html>
-<html lang="en">
+<html>
+<div class="container">
 <head>
-  <meta charset = "utf-8">
-  <link href = "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel = "stylesheet">
-  <script src = "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  <title>Register , login and logout user php mysql</title>
+<link href="css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="style.css"/>
 </head>
-
 <body>
-  <div class = "container">
-    <div class = "span10 offset1">
-      <div class = "row">
-        <h3>Login</h3>
-      </div>
-      
-      <form class = "form-horizontal" action = "login.php" method = "post">
-        
-        <div class="control-group <?php echo !empty($nameError)?'error':'';?>">
-          <label class = "control-label">Username</label>
-          <div class = "controls">
-            <input name = "username" type = "text" placeholder = "Username" value = "<?php echo !empty($username)?$username:'';?>">
-            <?php if(!empty($nameError)): ?>
-              <span class = "help-inline"><?php echo $nameError;?></span>
-            <?php endif; ?>
-          </div>
-        </div>
-        
-        <div class = "control-group <?php echo !empty($passwordError)?'error':'';?>">
-          <label class = "control-label">Password</label>
-          <div class = "controls">
-            <input name = "password" type = "password" placeholder = "Password" value = "<?php echo !empty($password)?$password:'';?>">
-            <?php if(!empty($passwordError)): ?>
-              <span class = "help-inline"><?php echo $passwordError;?></span>
-            <?php endif;?>
-          </div>
-        </div>
+<div class="header">
+    <h1>Register, login and logout user php mysql</h1>
+</div>
+<?php
+    if(isset($_SESSION['message']))
+    {
+         echo "<div id='error_msg'>".$_SESSION['message']."</div>";
+         unset($_SESSION['message']);
+    }
+?>
+<div class="row">
+<form  class="form-horizontal" method="post" action="login.php">
+  <table>
+     <tr>
+           <td>Username : </td>
+           <td><input type="text" name="username" class="textInput"></td>
+     </tr>
+      <tr>
+           <td>Password : </td>
+           <td><input type="password" name="password" class="textInput"></td>
+     </tr>
+      <tr>
+           <td></td>
+           <td><input type="submit" name="login_btn" class="btn btn-success" value="Login"></td>
+			<td><a class="btn btn-info" href="http://csis.svsu.edu/~jdharri2/cis355/Final/register.php">Register</a></td>
 
-        <div class="form-actions"><br />
-          <button type = "submit" class = "btn btn-success">Log In</button>
-          <a class = "btn btn-info" href = "register.php">Register</a>
-
-        </div>
-      </form>
-    </div>
-  </div> <!-- ends container -->
+     </tr>
   
-  <?php
-    echo "<br /><br /><br /><br />;";
-    show_source(__FILE__);
-  ?>
- 
+</table>
+</form>
+</div>
 </body>
+</div>
 </html>
+ 
+ 

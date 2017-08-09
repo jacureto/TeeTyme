@@ -1,7 +1,7 @@
 <?php
-  session_start();
-  $_SESSION['name'] = '';
-  $_SESSION['cust_id'] = '';
-  session_destroy();
-  header("Location: login.php"); //redirect back to login
+session_start();
+session_destroy();
+unset($_SESSION['username']);
+$_SESSION['message']="You are now logged out";
+header("location:login.php");
 ?>
