@@ -1,6 +1,6 @@
 
 <?php
-	include 'database.php'; //	include 'crud.php';
+	include 'database.php'; 
 	class Courses{ //implements Table {
 		private $id;
 		private $name;
@@ -28,7 +28,7 @@
 		private $par16;
 		private $par17;
 		private $par18;
-		//constructor
+		
 		function __construct($id,$fname,$lname,$email,$phone){
 			$this->id = $id;
 			$this->name = $name;
@@ -125,29 +125,29 @@
                             echo '<tr>';
                             echo '<td>'. $row['name'] . '</td>';
                             echo '<td>'. $row['email'] . '</td>';
-							echo '<td>'. $row['phone'] . '</td>';
+                            echo '<td>'. $row['phone'] . '</td>';
                             echo '<td>'. $row['address'] . '</td>';
- 							echo '<td>'. $row['city'] . '</td>';
-							echo '<td>'. $row['state'] . '</td>';
-							echo '<td>'. $row['zip'] . '</td>';
-							echo '<td>'. $row['par01'] . '</td>';
-							echo '<td>'. $row['par02'] . '</td>';
-							echo '<td>'. $row['par03'] . '</td>';
-							echo '<td>'. $row['par04'] . '</td>';
-							echo '<td>'. $row['par05'] . '</td>';
-							echo '<td>'. $row['par06'] . '</td>';
-							echo '<td>'. $row['par07'] . '</td>';
-							echo '<td>'. $row['par08'] . '</td>';
-							echo '<td>'. $row['par09'] . '</td>';
-							echo '<td>'. $row['par10'] . '</td>';
-							echo '<td>'. $row['par11'] . '</td>';
-							echo '<td>'. $row['par12'] . '</td>';
-							echo '<td>'. $row['par13'] . '</td>';
-							echo '<td>'. $row['par14'] . '</td>';
-							echo '<td>'. $row['par15'] . '</td>';
-							echo '<td>'. $row['par16'] . '</td>';
-							echo '<td>'. $row['par17'] . '</td>';
-							echo '<td>'. $row['par18'] . '</td>';
+                            echo '<td>'. $row['city'] . '</td>';
+							              echo '<td>'. $row['state'] . '</td>';
+							              echo '<td>'. $row['zip'] . '</td>';
+							              echo '<td>'. $row['par01'] . '</td>';
+							              echo '<td>'. $row['par02'] . '</td>';
+							              echo '<td>'. $row['par03'] . '</td>';
+							              echo '<td>'. $row['par04'] . '</td>';
+							              echo '<td>'. $row['par05'] . '</td>';
+							              echo '<td>'. $row['par06'] . '</td>';
+							              echo '<td>'. $row['par07'] . '</td>';
+							              echo '<td>'. $row['par08'] . '</td>';
+							              echo '<td>'. $row['par09'] . '</td>';
+							              echo '<td>'. $row['par10'] . '</td>';
+							              echo '<td>'. $row['par11'] . '</td>';
+							              echo '<td>'. $row['par12'] . '</td>';
+							              echo '<td>'. $row['par13'] . '</td>';
+							              echo '<td>'. $row['par14'] . '</td>';
+							              echo '<td>'. $row['par15'] . '</td>';
+							              echo '<td>'. $row['par16'] . '</td>';
+							              echo '<td>'. $row['par17'] . '</td>';
+							              echo '<td>'. $row['par18'] . '</td>';
                             echo '<td> <a class="btn btn-info" href="read_courses.php?id='.$row['id'].'">Read</a>
                             <a class="btn btn-success" href="update_courses.php?id='.$row['id'].'">Update</a>
                             <a class="btn btn-danger" href="delete_courses.php?id='.$row['id'].'">Delete</a></td>';
@@ -205,10 +205,7 @@
        if (empty($email)) {
             $emailError = 'Please enter Email Address';
             $valid = false;
-        } else if ( !filter_var($email,FILTER_VALIDATE_EMAIL) ) {
-            $emailError = 'Please enter a valid Email Address';
-            $valid = false;
-       }
+        } 
         if (empty($phone)) {
             $phoneError = 'Please enter a valid Phone Number';
             $valid = false;
@@ -222,7 +219,10 @@
             $q->execute(array($name,$email,$phone,$address,$city,$state,$zip,$par01,$par02,$par03,$par04,$par05,$par06,$par07,$par08,$par09,$par10,$par11,$par12,$par13,$par14,$par15,$par16,$par17,$par18));
             Database::disconnect();
             header("Location: index_courses.php");
-        }
+        }else
+		{
+		  header("Location:index_courses.php");
+		}
    }
 ?> <!DOCTYPE html> <html lang="en"> <head>
     <meta charset="utf-8">
@@ -684,9 +684,9 @@
                     </div>
                     <form class="form-horizontal" action="delete_courses.php" method="post">
                       <input type="hidden" name="id" value="<?php echo $id;?>"/>
-                      <p class="alert alert-error">Are you sure to delete ?</p>
+                      <p class="alert alert-error">Are you sure you want to delete this course?</p>
                       <div class="form-actions">
-                          <button type="submit" class="btn btn-danger">Yes</button>
+                          <button type="submit" class="btn btn-danger" onClick = \"delete_courses\", {$this->id});'>Yes</button>
                           <a class="btn btn-success" href="index_courses.php">No</a>
                         </div>
                     </form>
@@ -802,7 +802,7 @@
     <div class="container">
                 <div class="span10 offset1">
                     <div class="row">
-                        <h3>Update a Customer</h3>
+                        <h3>Update a Course</h3>
                     </div>
                     <form class="form-horizontal" action="update_courses.php?id=<?php echo $id?>" method="post">
                       <div class="control-group <?php echo !empty($nameError)?'error':'';?>">

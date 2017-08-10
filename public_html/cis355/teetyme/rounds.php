@@ -23,24 +23,21 @@
 		private $strokes16;
 		private $strokes17;
 		private $strokes18;
-
+    
 		//constructor
-		function __construct($id,$fname,$lname,$email,$mobile){
+		function __construct($id,$name,$date,$time){
 			$this->id = $id;
 			$this->name = $name;
-			$this->email = $email;
-			$this->mobile = $mobile;
+			$this->date = $date;
+      $this->time = $time;
 		}
-
  		public function login(){
         session_start();
         if(!isset($_SESSION['username']))
         {
             header( "Location: login.php" );
         }
-
     }
-
 		public function displayListScreen(){ ?>
 		<!DOCTYPE html>
 		<html lang="en">
@@ -81,10 +78,10 @@
                 	<table class="table table-striped table-bordered">
                   		<thead>
                     		<tr>
-							<th> Course ID </th>
-							<th> Course Name </th>
-							<th> Tee Date </th>
-							<th> Tee Time </th>
+							 <th> Course ID </th>
+							 <th> Course Name </th>
+							 <th> Tee Date </th>
+               <th> Tee Time </th>
 							 <th>Hole 1 </th>
 							 <th>Hole 2 </th>
 							 <th>Hole 3 </th>
@@ -107,48 +104,47 @@
                     		</tr>
                   		</thead>
                  <tbody>
-                  <?php
-                   $pdo = Database::connect();
-                   $sql = 'SELECT * FROM tt_rounds ORDER BY id DESC';
-
-                   foreach ($pdo->query($sql) as $row) {
-                            echo '<tr>';
-							echo '<td>'. $row['course_id']. '</td>';
-					$num = $row['course_id'];
-					$sql1 = "SELECT * FROM tt_courses WHERE id = $num";
-
-					foreach($pdo->query($sql1) as $row1){
-						echo '<td>'. $row1['name']. '</td>';
-					}
-
-
-                            echo '<td>'. $row['date'] . '</td>';
-                            echo '<td>'. $row['time'] . '</td>';
-                            echo '<td>'. $row['strokes01'] . '</td>';
- 							echo '<td>'. $row['strokes02'] . '</td>';
-							echo '<td>'. $row['strokes03'] . '</td>';
-							echo '<td>'. $row['strokes04'] . '</td>';
-							echo '<td>'. $row['strokes05'] . '</td>';
-							echo '<td>'. $row['strokes06'] . '</td>';
-							echo '<td>'. $row['strokes07'] . '</td>';
-							echo '<td>'. $row['strokes08'] . '</td>';
-							echo '<td>'. $row['strokes09'] . '</td>';
-							echo '<td>'. $row['strokes10'] . '</td>';
-							echo '<td>'. $row['strokes11'] . '</td>';
-							echo '<td>'. $row['strokes12'] . '</td>';
-							echo '<td>'. $row['strokes13'] . '</td>';
-							echo '<td>'. $row['strokes14'] . '</td>';
-							echo '<td>'. $row['strokes15'] . '</td>';
-							echo '<td>'. $row['strokes16'] . '</td>';
-							echo '<td>'. $row['strokes17'] . '</td>';
-							echo '<td>'. $row['strokes18'] . '</td>';
-                            echo '<td> <a class="btn btn-info" href="read_rounds.php?id='.$row['id'].'">Read</a>
-                            <a class="btn btn-success" href="update_rounds.php?id='.$row['id'].'">Update</a>
-                            <a class="btn btn-danger" href="delete_rounds.php?id='.$row['id'].'">Delete</a></td>';
-                            echo '</tr>';
-                   }
-                   Database::disconnect();
-                  ?>
+    <?php
+      $pdo = Database::connect();
+      $sql = 'SELECT * FROM tt_rounds ORDER BY id DESC';
+      foreach ($pdo->query($sql) as $row) 
+      {
+        echo '<tr>';
+        echo '<td>'. $row['course_id']. '</td>';
+        $num = $row['course_id'];
+        $sql1 = "SELECT * FROM tt_courses WHERE id = $num";
+        foreach($pdo->query($sql1) as $row1){
+          echo '<td>'. $row1['name']. '</td>';
+        }
+        
+        echo '<td>'. $row['date'] . '</td>';
+        echo '<td>'. $row['time'] . '</td>';
+        echo '<td>'. $row['strokes01'] . '</td>';
+        echo '<td>'. $row['strokes02'] . '</td>';
+        echo '<td>'. $row['strokes03'] . '</td>';
+        echo '<td>'. $row['strokes04'] . '</td>';
+        echo '<td>'. $row['strokes05'] . '</td>';
+        echo '<td>'. $row['strokes06'] . '</td>';
+        echo '<td>'. $row['strokes07'] . '</td>';
+        echo '<td>'. $row['strokes08'] . '</td>';
+        echo '<td>'. $row['strokes09'] . '</td>';
+        echo '<td>'. $row['strokes10'] . '</td>';
+        echo '<td>'. $row['strokes11'] . '</td>';
+        echo '<td>'. $row['strokes12'] . '</td>';
+        echo '<td>'. $row['strokes13'] . '</td>';
+        echo '<td>'. $row['strokes14'] . '</td>';
+        echo '<td>'. $row['strokes15'] . '</td>';
+        echo '<td>'. $row['strokes16'] . '</td>';
+        echo '<td>'. $row['strokes17'] . '</td>';
+        echo '<td>'. $row['strokes18'] . '</td>';
+        echo '<td> <a class="btn btn-info" href="read_rounds.php?id='.$row['id'].'">Read</a>
+              <a class="btn btn-success" href="update_rounds.php?id='.$row['id'].'">Update</a>
+              <a class="btn btn-danger" href="delete_rounds.php?id='.$row['id'].'">Delete</a></td>';
+        echo '</tr>';
+      }
+     
+      Database::disconnect();
+    ?>
                   </tbody>
             	</table>
 		 <p>You are currently logged in as user '<?php echo $_SESSION['username'];?>.' Would you like to <a href="logout.php"> log out</a>?</p>
@@ -157,59 +153,55 @@
   	</body>
 	</html> <?php
 	}
-	public function displayCreateScreen(){
-//user will not be able to input strokes because they haven't played yet this will be done in the update section
-	if(!empty($_POST)){
-		$personError = null;
-		$courseError = null;
-		$flagC = true;
-		$flagP = true;
+	public function displayCreateScreen()
+  {
 
-		$time = $_POST['time'];
-		$date = $_POST['date'];
-		$personid = $_POST['personid'];
-		$courseid = $_POST['courseid'];
-
-$valid = true;
-	$pdo2 = Database::connect();
-	$sql2 = "SELECT * FROM tt_persons WHERE id = $personid";
-	$p = 0;
-
-	foreach($pdo2->query($sql2) as $row2){
-		$p = $row2['id'];
-	}
-	if($p == 0){
-		$personError = 'Please enter a valid id number';
-		$valid = false;
-	}
-	Database::disconnect();
-
-    $pdo2 = Database::connect();
-    $sql2 = "SELECT * FROM tt_courses WHERE id = $courseid";
-    $c = 0;
-
-    foreach($pdo2->query($sql2) as $row2){
-        $c = $row2['id'];
-    }
-    if($c == 0){
-        $courseError = 'Please enter a valid id number';
+    if(!empty($_POST)){
+      $personError = null;
+      $courseError = null;
+      $flagC = true;
+      $flagP = true;
+    
+      $time = $_POST['time'];
+      $date = $_POST['date'];
+      $personid = $_POST['personid'];
+      $courseid = $_POST['courseid'];
+    
+      $valid = true;
+      $pdo2 = Database::connect();
+      $sql2 = "SELECT * FROM tt_persons WHERE id = $personid";
+      $p = 0;
+      foreach($pdo2->query($sql2) as $row2){
+        $p = $row2['id'];
+      }
+      if($p == 0){
+        $personError = 'Please enter a valid id number';
         $valid = false;
+      }
+      Database::disconnect();
+      $pdo2 = Database::connect();
+      $sql2 = "SELECT * FROM tt_courses WHERE id = $courseid";
+      $c = 0;
+      foreach($pdo2->query($sql2) as $row2){
+        $c = $row2['id'];
+      }
+      if($c == 0){
+        $courseError = 'Please enter a valid ID number';
+        $valid = false;
+      }
+      Database::disconnect();
+    
+      if($valid)
+      {
+        $pdo = Database::connect();
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $sql = "INSERT INTO tt_rounds(person_id,course_id,date,time) values(?,?,?,?)"; 
+        $q = $pdo->prepare($sql);
+        $q->execute(array($personid,$courseid,$date,$time));
+        Database::disconnect();
+        header("Location: index_rounds.php");
+      }
     }
-    Database::disconnect();
-
-
-
-
-		if($valid){
-			$pdo = Database::connect();
-        	$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-         	$sql = "INSERT INTO tt_rounds(person_id,course_id,date,time) values(?,?,?,?)"; 
-        	$q = $pdo->prepare($sql);
-         	$q->execute(array($personid,$courseid,$date,$time));
-         	Database::disconnect();
-         	header("Location: index_rounds.php");
-		}
-	}
 ?>
 <html lang="en"> 
 <head>
@@ -219,57 +211,46 @@ $valid = true;
     <script src="js/bootstrap.min.js"></script> 
 </head> 
 <div class="container">
-<div class="list-right">
-<h2> Persons </h2>
-<ul>
-<?php
-	$pdo = Database::connect();
-	$sql = "SELECT * FROM tt_persons";
-	foreach ($pdo->query($sql) as $row) {
-	?><li><?php echo $row['id'] ?> = <?php echo $row['name']?></li><?php } Database:: disconnect();?>
-</ul>
-<br><br>
-<h2> Courses </h2>
-<ul>
-<?php 
-	$pdo = Database::connect();
-	$sql = "SELECT * FROM tt_courses";
-	foreach ($pdo->query($sql) as $row) {
-	?><li><?php echo $row['id']?> = <?php echo $row['name']?></li><?php } Database:: disconnect();?>
-</ul>
-</div>
 <body>
 <hr>
 	<h1> Create Round </h1>
 <form class="form-horizontal" action="create_rounds.php" method="post"> 
 
 
-								  <div class="control-group <?php echo !empty($courseError)?'error':'';?>">
-									<label class="control-label">Course ID</label>
-									<div class="controls">
-										<input name="courseid" type="text"  placeholder="Course ID" value="<?php echo !empty($courseid)?$courseid:'';?>">
-										<?php if(!empty($courseError)):?>
-											<span class="help-line"><?php echo $courseError;?></span>
-										<?php endif; ?>
-									</div>
-								  </div>
+<div class="control-group <?php echo !empty($courseError)?'error':'';?>">
+<label class="control-label">Please select a Course.</label>
+<div class="controls">
 
-<div class="control-group <?php echo !empty($personError)?'error':'';?>">
-	<label class="control-label">Person ID </label>
-		<div class="controls">
-			<input name="personid" type="text" placeholder="Person ID" value="<?php echo !empty($personid)?$personid:'';?>">
-			<?php if(!empty($personError)): ?>
-				<span class="help-line"><?php echo $personError;?></span>
-			<?php endif;?>
-		</div>
-</div>
+  <select name="personid" type="text">
+    <?php
+        $pdo = Database::connect();
+        $sql = "SELECT * FROM tt_courses";
+      foreach ($pdo->query($sql) as $row) {
+        ?><option value="<?php echo $row['id']; ?>"> <?php echo $row['name'];?></option><?php
+      }
+      Database:: disconnect();
+    ?>
+</select>
 
+<div class="control-group <?php echo !empty($courseError)?'error':'';?>">
+<label class="control-label">Please select a Person.</label>
+<div class="controls">
 
+  <select name="personid" type="text">
+    <?php
+        $pdo = Database::connect();
+        $sql = "SELECT * FROM tt_persons";
+      foreach ($pdo->query($sql) as $row) {
+        ?><option value="<?php echo $row['id']; ?>"> <?php echo $row['name'];?></option><?php
+      }
+      Database:: disconnect();
+    ?>
+  </select>
 
 <div class="control-group <?php echo !empty($dateError)?'error':'';?>">
 									<label class="control-label">Date</label>
 									<div class="controls">	
-										<input name="date" type="date" placeholder="mm/dd/yyyy" value="<?php echo !empty($date)?$date:'';?>">
+										<input name="date" type="date" placeholder="MM/DD/YYYY" value="<?php echo !empty($date)?$date:'';?>">
 										<?php if (!empty($dateError)): ?>
 										<span class="help-inline"><?php echo $dateError;?></span>
 										<?php endif;?>
@@ -279,14 +260,14 @@ $valid = true;
 <div class="control-group <?php echo !empty($dateError)?'error':'';?>">
 									<label class="control-label">Time</label>
 									<div class="controls">	
-										<input name="time" type="time" placeholder="--:--" value="<?php echo !empty($time)?$time:'';?>">
+										<input name="time" type="time" placeholder="--:-- AM/PM" value="<?php echo !empty($time)?$time:'';?>">
 										<?php if (!empty($timeError)): ?>
 										<span class="help-inline"><?php echo $timeError;?></span>
 										<?php endif;?>
 									</div>
 								</div>
 
-<br>
+                <br>
 						<div class="form-actions">
                           <button type="submit" class="btn btn-success">Create</button>
                           <a class="btn btn-danger" href="index_rounds.php">Back</a>
@@ -560,7 +541,7 @@ $valid = true;
                     </div>
                     <form class="form-horizontal" action="delete_rounds.php" method="post">
                       <input type="hidden" name="id" value="<?php echo $id;?>"/>
-                      <p class="alert alert-error">Are you sure to delete ?</p>
+                      <p class="alert alert-error">Are you sure you want to delete this course?</p>
                       <div class="form-actions">
                           <button type="submit" class="btn btn-danger">Yes</button>
                           <a class="btn btn-success" href="index_rounds.php">No</a>
@@ -579,11 +560,9 @@ $valid = true;
 			if ( null==$id ) {
 				header("Location: index_rounds.php");
 			}
-			
-			//(decision) If post is not empty, it means person submitted data
-			// if $_post is empty, then pre-fill data
+
 				if ( !empty($_POST)) {
-					// keep track validation errors
+					
 					$courseError = null;
 					$personError = null;
 					$dateError = null;
@@ -607,7 +586,7 @@ $valid = true;
 					$strokes17Error = null;
 					$strokes18Error = null;
 					 
-					// keep track post values
+					// keep track of post values
 					$course_id = $_POST['course_id'];
 					$person_id = $_POST['person_id'];
 					$date = $_POST['date'];
@@ -636,7 +615,6 @@ $valid = true;
     $pdo2 = Database::connect();
     $sql2 = "SELECT * FROM tt_persons WHERE id = $person_id";
     $p = 0;
-
     foreach($pdo2->query($sql2) as $row2){
         $p = $row2['id'];
     }
@@ -645,11 +623,9 @@ $valid = true;
         $valid = false;
     }
     Database::disconnect();
-
     $pdo2 = Database::connect();
     $sql2 = "SELECT * FROM tt_courses WHERE id = $course_id";
     $c = 0;
-
     foreach($pdo2->query($sql2) as $row2){
         $c = $row2['id'];
     }
@@ -658,8 +634,6 @@ $valid = true;
         $valid = false;
     }
     Database::disconnect();
-
-
 					if (empty($date)) {
 						$dateError = 'Please enter Date';
 						$valid = false;

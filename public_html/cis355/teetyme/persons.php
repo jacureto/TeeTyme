@@ -157,7 +157,7 @@
 
                 <div class="span10 offset1">
                     <div class="row">
-                        <h3>Create a Customer</h3>
+                        <h3>Create a Golfer</h3>
                     </div>
 
                     <form class="form-horizontal" action="create_persons.php" method="post">
@@ -314,14 +314,14 @@
 
                 <div class="span10 offset1">
                     <div class="row">
-                        <h3>Delete a Customer</h3>
+                        <h3>Delete a Golfer</h3>
                     </div>
 
                     <form class="form-horizontal" action="delete_persons.php" method="post">
                       <input type="hidden" name="id" value="<?php echo $id;?>"/>
-                      <p class="alert alert-error">Are you sure to delete ?</p>
+                      <p class="alert alert-error">Are you sure you want to delete this golfer?</p>
                       <div class="form-actions">
-                          <button type="submit" class="btn btn-danger">Yes</button>
+                          <button type="submit" class="btn btn-danger" onClick = '\"delete_courses.php\", {$this->id});'>Yes</button>
                           <a class="btn btn-success" href="index_persons.php">No</a>
                         </div>
                     </form>

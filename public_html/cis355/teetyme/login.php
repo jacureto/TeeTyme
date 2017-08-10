@@ -16,13 +16,13 @@ if(isset($_POST['login_btn']))
     $result=mysqli_query($db,$sql);
     if(mysqli_num_rows($result)==1)
     {
-        $_SESSION['message']="You are now Loggged In";
+        $_SESSION['message']="You have successfully logged in.";
         $_SESSION['username']=$username;
         header("location:home.php");
     }
    else
    {
-                $_SESSION['message']="Username and Password combiation incorrect";
+                $_SESSION['message']="Your username and password combination was incorrect. Please try again.";
     }
 }
 ?>
@@ -30,13 +30,13 @@ if(isset($_POST['login_btn']))
 <html>
 <div class="container">
 <head>
-  <title>Register , login and logout user php mysql</title>
+  <title>Log In to TeeTyme</title>
 <link href="css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="style.css"/>
 </head>
 <body>
 <div class="header">
-    <h1>Register, login and logout user php mysql</h1>
+    <h1>Log In to TeeTyme</h1>
 </div>
 <?php
     if(isset($_SESSION['message']))
@@ -57,9 +57,9 @@ if(isset($_POST['login_btn']))
            <td><input type="password" name="password" class="textInput"></td>
      </tr>
       <tr>
-           <td></td>
            <td><input type="submit" name="login_btn" class="btn btn-success" value="Login"></td>
-			<td><a class="btn btn-info" href="http://csis.svsu.edu/~jdharri2/cis355/Final/register.php">Register</a></td>
+		   <td />
+			<td><a class="btn btn-info" href="register.php">Register</a></td>
 
      </tr>
   

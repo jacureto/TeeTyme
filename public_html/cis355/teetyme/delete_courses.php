@@ -1,12 +1,11 @@
 <?php
-  include 'courses.php';
+    include 'courses.php';
 
-  $q = new Courses();
-  
-  $p = $q -> login();
+    $q = new Courses();
+ $p = $q -> login();
 
-  $p = $q -> displayDelete();
+    $p = $q -> displayDelete();
 
-  echo $p;
+    echo $p;
 ?>
 

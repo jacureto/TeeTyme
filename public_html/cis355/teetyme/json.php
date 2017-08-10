@@ -1,5 +1,4 @@
 <?php
-
  include "database.php";
         if(isset($_GET['id'])) {
                 echo json_encode(
@@ -15,14 +14,9 @@
                         array()
                         )->fetchAll(PDO::FETCH_ASSOC)
                 );
-
-
-
 ?>  
 <html>
-  <link   href="css/bootstrap.min.css" rel="stylesheet">
-  
-  <br><br>
-  
-  <a class="btn btn-danger" href="home.php">Home</a>
+ <link   href="css/bootstrap.min.css" rel="stylesheet">
+<br><br>
+<a class="btn btn-info" href="home.php">Back to Home</a>
 </html>

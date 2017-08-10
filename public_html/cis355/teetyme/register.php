@@ -18,15 +18,15 @@ $password2 = $_POST['password2'];
 
 $valid = true;
   if (empty($username)) {
-            $usernameError = 'Please enter Username';
+            $usernameError = 'Please enter your username.';
             $valid = false;
         }
 if(empty($password)){
-	$passwordError = 'Please enter a password';
+	$passwordError = 'Please enter a password.';
 	$valid = false;
 }
 if(empty($password2)){
-	$password2Error = 'Please re-enter your password';
+	$password2Error = 'Please re-enter your password.';
 	$valid = false;
 }
 
@@ -53,7 +53,7 @@ if(isset($_POST['register_btn']) && $valid)
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Register , login and logout user php mysql</title>
+  <title>TeeTyme Registration</title>
   <link rel="stylesheet" type="text/css" href="style.css"/>
  <link href="css/bootstrap.min.css" rel="stylesheet">
 	<link href="css/css.css" rel="stylesheet">
@@ -62,7 +62,7 @@ if(isset($_POST['register_btn']) && $valid)
 <body>
 <div class="container"
 <div class="header">
-    <h1>Register, login and logout user php mysql</h1>
+    <h1>TeeTyme Registration</h1>
 </div>
 <?php
     if(isset($_SESSION['message']))
@@ -73,21 +73,21 @@ if(isset($_POST['register_btn']) && $valid)
 ?>
 <div class="register">
 <form method="post" action="register.php">
-           <h3>Username : </h3>
+           <h3></h3>
            <p><input type="text" name="username" class="textInput" value="<?php echo !empty($username)?$username:'';?>"</p>
 			 			<?php if (!empty($usernameError)): ?>
 
 			<span class="help-inline"><?php echo $usernameError;?></span>
             <?php endif;?>
 
-           <h3>Password : </h3>
+           <h3></h3>
            <p><input type="password" name="password" class="textInput" value="<?php echo !empty($password)?$password:'';?>"</p>
 			 			<?php if (!empty($passwordError)): ?>
 
 			<span class="help-inline"><?php echo $passwordError;?></span>
             <?php endif;?>
 
-           <h3>Password again: </h3>
+           <h3></h3>
            <p><input type="password" name="password2" class="textInput" value="<?php echo !empty($password2)?$password2:'';?>"</p>
  			<?php if (!empty($password2Error)): ?>
 
